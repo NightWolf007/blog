@@ -52,7 +52,7 @@ class Api::V1::CommentsController < ApplicationController
       return nil
     end
     @comment.destroy
-    render :json => {}
+    render :json => @comment
   end
 
   def comment_params

@@ -82,7 +82,7 @@ class Api::V1::PostsController < ApplicationController
       return nil
     end
     @post.destroy
-    render :json => {}
+    render :json => @post
   end
 
   def post_params

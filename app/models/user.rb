@@ -25,8 +25,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  def type
-    'users'
+  def is_admin?
+    return is_admin
   end
 
   private

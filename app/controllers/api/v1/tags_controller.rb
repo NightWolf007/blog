@@ -26,7 +26,7 @@ class Api::V1::TagsController < ApplicationController
   end
 
   def destroy
-    if current_user.is_admin?
+    unless current_user.is_admin?
       render :status => 403, :json => []
       return nil
     end
@@ -36,7 +36,7 @@ class Api::V1::TagsController < ApplicationController
       return nil
     end
     @tag.destroy
-    render :json => []
+    render :json => @tag
   end
 
   def tag_params
