@@ -28,6 +28,9 @@ class Api::V1::PostsController < ApplicationController
 
     @post = Post.new post_params
     if @post.save
+      params[:post][:tags].each do |e|
+        @post.tags << Tag.find(e)
+      end
       render :json => @post
     else
       render :status => 422, :json => [errors: @post.errors.full_messages]
@@ -55,6 +58,12 @@ class Api::V1::PostsController < ApplicationController
     end
 
     if @post.update_attributes post_params
+      p @post.tags
+      @post.tags.destroy_all
+      params[:post][:tags].each do |e|
+        @post.tags << Tag.find(e)
+      end
+      p @post.tags
       render :json => @post
     else
       render :status => 422, :json => [errors: @post.errors.full_messages]
@@ -72,7 +81,7 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def post_params
-    params.require(:post).permit(:title, :text, :user_id, :image)
+    params.require(:post).permit(:title, :text, :user_id, :tags, :image)
   end
 
   private
