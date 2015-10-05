@@ -1,4 +1,5 @@
 class Api::V1::PostsController < ApplicationController
+  @@images_dir = "public/images"
 
   before_filter :authenticate_user!, :except => [:index, :show]
 
@@ -18,9 +19,9 @@ class Api::V1::PostsController < ApplicationController
       return nil
     end
 
-    params[:post][:user_id] = current_user.id
+    params[:post][:user] = current_user.id
 
-    if params[:post][:img] && !params[:post][:img].is_a?(String)
+    if params[:post][:img] && !params[:post][:img].kind_of?(String)
       params[:post][:image] = upload_image params[:post][:img]
     else
       params[:image] = nil
@@ -28,9 +29,12 @@ class Api::V1::PostsController < ApplicationController
 
     @post = Post.new post_params
     if @post.save
-      params[:post][:tags].each do |e|
-        @post.tags << Tag.find(e)
+      if params[:post][:tags] && params[:post][:tags].kind_of?(Array)
+        params[:post][:tags].each do |e|
+          @post.tags << Tag.find(e)
+        end
       end
+
       render :json => @post
     else
       render :status => 422, :json => [errors: @post.errors.full_messages]
@@ -49,21 +53,22 @@ class Api::V1::PostsController < ApplicationController
       return nil
     end
 
-    params[:post][:user_id] = current_user.id
+    params[:post][:user] = current_user.id
 
     params[:post].delete :image
     if params[:post][:img] && !params[:post][:img].is_a?(String)
-      remove_image @post.image
+      remove_image @post.image if @post.image
       params[:post][:image] = upload_image params[:post][:img]
     end
 
     if @post.update_attributes post_params
-      p @post.tags
-      @post.tags.destroy_all
-      params[:post][:tags].each do |e|
-        @post.tags << Tag.find(e)
+      if params[:post][:tags] && params[:post][:tags].kind_of?(Array)
+        @post.tags.destroy_all
+        params[:post][:tags].each do |e|
+          @post.tags << Tag.find(e)
+        end
       end
-      p @post.tags
+
       render :json => @post
     else
       render :status => 422, :json => [errors: @post.errors.full_messages]
@@ -77,21 +82,22 @@ class Api::V1::PostsController < ApplicationController
       return nil
     end
     @post.destroy
-    render :json => []
+    render :json => {}
   end
 
   def post_params
-    params.require(:post).permit(:title, :text, :user_id, :tags, :image)
+    p = params.require(:post).permit(:title, :text, :user, :tags, :image)
+    p[:user_id] = p.delete(:user)
+    return p
   end
 
   private
 
   def upload_image(image)
-    images_dir = "public/images"
     filename = "#{SecureRandom.hex(5)}.#{image.original_filename.split('.').last}"
 
     file = image.read
-    File.open("#{images_dir}/#{filename}", 'wb') do |f|
+    File.open("#{@@images_dir}/#{filename}", 'wb') do |f|
       f.write file
     end
 
@@ -99,5 +105,6 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def remove_image(filename)
+    File.delete("#{@@images_dir}/#{filename}")
   end
 end

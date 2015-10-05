@@ -17,7 +17,8 @@ class Api::V1::CommentsController < ApplicationController
       render :status => 400, :json => [errors: "Comment can't be blank"]
       return nil
     end
-    params[:comment][:user_id] = current_user.id
+    p comment_params
+    params[:comment][:user] = current_user.id
     @comment = Comment.new comment_params
     if @comment.save
       render :json => @comment
@@ -36,7 +37,7 @@ class Api::V1::CommentsController < ApplicationController
       render :status => 403, :json => []
       return nil
     end
-    params[:comment][:user_id] = current_user.id
+    params[:comment][:user] = current_user.id
     if @comment.update_attributes comment_params
       render :json => @comment
     else
@@ -51,10 +52,13 @@ class Api::V1::CommentsController < ApplicationController
       return nil
     end
     @comment.destroy
-    render :json => []
+    render :json => {}
   end
 
   def comment_params
-    params.require(:comment).permit(:message, :post_id, :user_id)
+    p = params.require(:comment).permit(:message, :post, :user)
+    p[:post_id] = p.delete(:post)
+    p[:user_id] = p.delete(:user)
+    return p
   end
 end
