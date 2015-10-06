@@ -34,7 +34,7 @@ class Api::V1::CommentsController < ApplicationController
     end
     @comment = Comment.find params[:id]
     if current_user.id != @comment.user.id
-      render :status => 403, :json => []
+      render :status => 403, :json => {}
       return nil
     end
     params[:comment][:user] = current_user.id
@@ -48,7 +48,7 @@ class Api::V1::CommentsController < ApplicationController
   def destroy
     @comment = Comment.find params[:id]
     if current_user.id != @comment.user.id
-      render :status => 403, :json => []
+      render :status => 403, :json => {}
       return nil
     end
     @comment.destroy

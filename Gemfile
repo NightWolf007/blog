@@ -32,3 +32,5 @@ gem 'active_model_serializers', :git => 'https://github.com/beauby/active_model_
 gem 'devise'
 # cross domain
 gem 'rack-cors'
+
+gem 'dotenv-rails'

@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   end
 
   def is_admin?
-    return is_admin
+    is_admin
   end
 
   private

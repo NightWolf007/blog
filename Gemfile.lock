@@ -55,6 +55,10 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    dotenv (2.0.2)
+    dotenv-rails (2.0.2)
+      dotenv (= 2.0.2)
+      railties (~> 4.0)
     erubis (2.7.0)
     globalid (0.3.6)
       activesupport (>= 4.1.0)
@@ -125,6 +129,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers!
   devise
+  dotenv-rails
   mysql2 (~> 0.3.18)
   rack-cors
   rails

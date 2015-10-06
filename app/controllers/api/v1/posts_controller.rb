@@ -49,7 +49,7 @@ class Api::V1::PostsController < ApplicationController
 
     @post = Post.find params[:id]
     if current_user.id != @post.user.id
-      render :status => 403, :json => []
+      render :status => 403, :json => {}
       return nil
     end
 
@@ -78,7 +78,7 @@ class Api::V1::PostsController < ApplicationController
   def destroy
     @post = Post.find params[:id]
     if current_user.id != @post.user.id
-      render :status => 403, :json => []
+      render :status => 403, :json => {}
       return nil
     end
     @post.destroy

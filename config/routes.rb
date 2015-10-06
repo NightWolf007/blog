@@ -1,10 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :posts
-  resources :comments
-  resources :tags
-  resources :users
-  
   namespace :api, as: nil, :defaults => { :format => 'json' } do
     namespace :v1, as: nil do
       devise_for :users,
