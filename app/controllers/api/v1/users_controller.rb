@@ -29,6 +29,7 @@ class Api::V1::UsersController < ApplicationController
     end
 
     if @user.update_attributes user_params
+      sign_in @user, bypass: true if params.has_key?(:password)
       render :json => @user
     else
       render :status => 422, :json => [errors: @user.errors.full_messages]
@@ -46,6 +47,6 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :surname)
+    params.require(:user).permit(:email, :name, :surname, :password)
   end
 end
