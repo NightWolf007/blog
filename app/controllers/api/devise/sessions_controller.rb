@@ -5,9 +5,10 @@ class Api::Devise::SessionsController < Devise::SessionsController
       format.json do
         self.resource = warden.authenticate!(auth_options)
         sign_in(resource_name, resource)
-	data = ActiveModel::SerializableResource.new(self.resource).serializable_hash
+	data = {}
+	data[:user] = ActiveModel::SerializableResource.new(self.resource).serializable_hash
 	data[:auth_token] = self.resource.authentication_token
-	data[:user_email] = self.resource.email 
+	data[:user_email] = self.resource.email
         render json: data, status: 201
       end
     end
