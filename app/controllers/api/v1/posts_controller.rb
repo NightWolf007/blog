@@ -1,5 +1,5 @@
 class Api::V1::PostsController < ApplicationController
-  @@images_dir = "public/images"
+  @@images_dir = Rails.root.join('public', 'images')
   @@default_page_number = 1
   @@default_page_size = 5
 
