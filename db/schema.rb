@@ -41,7 +41,6 @@ ActiveRecord::Schema.define(version: 20151005202729) do
     t.datetime "date"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
-    t.string   "picture",    limit: 255
     t.string   "image",      limit: 255
   end
 
