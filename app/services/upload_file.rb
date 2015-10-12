@@ -13,13 +13,12 @@ class UploadFile
   end
 
   def validate
-    p @file.size
     unless @file.size <= self.class::MAX_SIZE
       @context.upload_entity_too_large MAX_SIZE
       return false
     end
+    
     filetype = File.extname @file.original_filename
-    p filetype
     unless self.class::ALLOWED_FORMATS.empty? || self.class::ALLOWED_FORMATS.include?(filetype)
       @context.upload_unsupported_media_type filetype
       return false

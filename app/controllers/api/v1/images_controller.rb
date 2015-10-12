@@ -1,13 +1,14 @@
 class Api::V1::ImagesController < ApplicationController
 
-  before_filter :authenticate_user!
+  # before_filter :authenticate_user!
 
   def create
     unless params.has_key?(:image)
+      p params
       render status: :bad_request, json: { error: "Form must contain image key" }
       return
     end
-    UploadPostImage.new(self, params[:image]).execute
+    UploadImage.new(self, params[:image]).execute
   end
 
   def upload_success(img_name)
