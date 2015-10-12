@@ -22,7 +22,7 @@ class Api::V1::UsersController < ApplicationController
 
   def update
     unless params.has_key?(:user)
-      render :status => 400, :json => [errors: "User can't be blank"]
+      render :status => 400, :json => { errors: "User can't be blank" }
       return nil
     end
 
@@ -36,7 +36,7 @@ class Api::V1::UsersController < ApplicationController
       sign_in @user, bypass: true if params.has_key?(:password)
       render :json => @user
     else
-      render :status => 422, :json => [errors: @user.errors.full_messages]
+      render :status => 422, :json => { errors: @user.errors.full_messages }
     end
   end
 
@@ -46,11 +46,13 @@ class Api::V1::UsersController < ApplicationController
       render :status => 403, :json => {}
       return nil
     end
+    DeleteImage.new(@user.image).execute
     @user.destroy
     render :json => @user
   end
 
   def user_params
-    params.require(:user).permit(:email, :name, :surname, :password)
+    p = params.require(:user).permit(:email, :name, :surname, :password, :avatar)
+    p[:image] = p.delete(:avatar).split('/').last
   end
 end

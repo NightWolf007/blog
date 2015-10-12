@@ -1,5 +1,4 @@
 class Api::V1::PostsController < ApplicationController
-  @@images_dir = Rails.root.join('public', 'images')
   @@default_page_number = 1
   @@default_page_size = 5
 
@@ -24,12 +23,6 @@ class Api::V1::PostsController < ApplicationController
     end
 
     params[:post][:user] = current_user.id
-
-    if params[:post][:img] && !params[:post][:img].kind_of?(String)
-      params[:post][:image] = upload_image params[:post][:img]
-    else
-      params[:image] = nil
-    end
 
     @post = Post.new post_params
     if @post.save
@@ -59,12 +52,6 @@ class Api::V1::PostsController < ApplicationController
 
     params[:post][:user] = current_user.id
 
-    params[:post].delete :image
-    if params[:post][:img] && !params[:post][:img].is_a?(String)
-      remove_image @post.image if @post.image
-      params[:post][:image] = upload_image params[:post][:img]
-    end
-
     if @post.update_attributes post_params
       if params[:post][:tags] && params[:post][:tags].kind_of?(Array)
         @post.tags.destroy_all
@@ -85,30 +72,15 @@ class Api::V1::PostsController < ApplicationController
       render :status => 403, :json => {}
       return nil
     end
+    DeleteImage.new(@post.image).execute
     @post.destroy
     render :json => @post
   end
 
   def post_params
-    p = params.require(:post).permit(:title, :text, :user, :tags, :image)
+    p = params.require(:post).permit(:title, :text, :user, :tags, :img)
     p[:user_id] = p.delete(:user)
+    p[:image] = p.delete(:img).split('/').last
     return p
-  end
-
-  private
-
-  def upload_image(image)
-    filename = "#{SecureRandom.hex(5)}.#{image.original_filename.split('.').last}"
-
-    file = image.read
-    File.open("#{@@images_dir}/#{filename}", 'wb') do |f|
-      f.write file
-    end
-
-    return filename
-  end
-
-  def remove_image(filename)
-    File.delete("#{@@images_dir}/#{filename}")
   end
 end

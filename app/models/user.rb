@@ -25,6 +25,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def avatar
+    "#{ENV['SERVER_BASE_URL']}/images/#{image}" if image
+  end
+
   def is_admin?
     is_admin
   end

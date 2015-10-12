@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151005202729) do
+ActiveRecord::Schema.define(version: 20151012123448) do
 
   create_table "comments", force: :cascade do |t|
     t.text     "message",    limit: 65535
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20151005202729) do
     t.datetime "updated_at",                                         null: false
     t.string   "authentication_token",   limit: 255
     t.boolean  "is_admin",                           default: false, null: false
+    t.string   "image",                  limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
