@@ -18,7 +18,7 @@ class Api::V1::CommentsController < ApplicationController
 
   def create
     unless params.has_key?(:comment)
-      render :status => 400, :json => [errors: "Comment can't be blank"]
+      render :status => 400, :json => { errors: "Comment can't be blank" }
       return nil
     end
     p comment_params
@@ -27,13 +27,13 @@ class Api::V1::CommentsController < ApplicationController
     if @comment.save
       render :json => @comment
     else
-      render :status => 422, :json => [errors: @comment.errors.full_messages]
+      render :status => 422, :json => { errors: @comment.errors.full_messages }
     end
   end
 
   def update
     unless params.has_key?(:comment)
-      render :status => 400, :json => [errors: "Comment can't be blank"]
+      render :status => 400, :json => { errors: "Comment can't be blank" }
       return nil
     end
     @comment = Comment.find params[:id]
@@ -45,7 +45,7 @@ class Api::V1::CommentsController < ApplicationController
     if @comment.update_attributes comment_params
       render :json => @comment
     else
-      render :status => 422, :json => [errors: @comment.errors.full_messages]
+      render :status => 422, :json => { errors: @comment.errors.full_messages }
     end
   end
 

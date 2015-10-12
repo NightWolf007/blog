@@ -18,14 +18,14 @@ class Api::V1::TagsController < ApplicationController
 
   def create
     unless params.has_key?(:tag)
-      render :status => 400, :json => [errors: "Tag can't be blank"]
+      render :status => 400, :json => { errors: "Tag can't be blank" }
       return nil
     end
     @tag = Tag.new tag_params
     if @tag.save
       render :json => @tag
     else
-      render :status => 422, :json => [errors: @tag.errors.full_messages]
+      render :status => 422, :json => { errors: @tag.errors.full_messages }
     end
   end
 

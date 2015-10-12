@@ -17,30 +17,32 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def create
-    unless params.has_key?(:post)
-      render :status => 400, :json => [errors: "Post can't be blank"]
+    unless params[:post]
+      render :status => 400, :json => { errors: "Post can't be blank" }
       return nil
     end
 
     params[:post][:user] = current_user.id
+    @tags = params[:post].delete(:tags)
 
     @post = Post.new post_params
     if @post.save
-      if params[:post][:tags] && params[:post][:tags].kind_of?(Array)
-        params[:post][:tags].each do |e|
+      if @tags && @tags.kind_of?(Array)
+        @post.tags.destroy_all
+        @tags.each do |e|
           @post.tags << Tag.find(e)
         end
       end
 
       render :json => @post
     else
-      render :status => 422, :json => [errors: @post.errors.full_messages]
+      render :status => 422, :json => { errors: @post.errors.full_messages }
     end
   end
 
   def update
-    unless params.has_key?(:post)
-      render :status => 400, :json => [errors: "Post can't be blank"]
+    unless params[:post]
+      render :status => 400, :json => { errors: "Post can't be blank" }
       return nil
     end
 
@@ -51,18 +53,19 @@ class Api::V1::PostsController < ApplicationController
     end
 
     params[:post][:user] = current_user.id
+    @tags = params[:post].delete(:tags)
 
     if @post.update_attributes post_params
-      if params[:post][:tags] && params[:post][:tags].kind_of?(Array)
+      if @tags && @tags.kind_of?(Array)
         @post.tags.destroy_all
-        params[:post][:tags].each do |e|
+        @tags.each do |e|
           @post.tags << Tag.find(e)
         end
       end
 
       render :json => @post
     else
-      render :status => 422, :json => [errors: @post.errors.full_messages]
+      render :status => 422, :json => { errors: @post.errors.full_messages }
     end
   end
 
@@ -78,9 +81,9 @@ class Api::V1::PostsController < ApplicationController
   end
 
   def post_params
-    p = params.require(:post).permit(:title, :text, :user, :tags, :img)
+    p = params.require(:post).permit(:title, :text, :user, :img)
     p[:user_id] = p.delete(:user)
-    p[:image] = p.delete(:img).split('/').last
+    p[:image] = p[:img] ? p.delete(:img).split('/').last : nil
     return p
   end
 end

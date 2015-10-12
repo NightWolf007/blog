@@ -53,6 +53,7 @@ class Api::V1::UsersController < ApplicationController
 
   def user_params
     p = params.require(:user).permit(:email, :name, :surname, :password, :avatar)
-    p[:image] = p.delete(:avatar).split('/').last
+    p[:image] = p[:img] ? p.delete(:avatar).split('/').last : nil
+    return p
   end
 end

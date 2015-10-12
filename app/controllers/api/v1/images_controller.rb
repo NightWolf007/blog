@@ -1,6 +1,6 @@
 class Api::V1::ImagesController < ApplicationController
 
-  # before_filter :authenticate_user!
+  before_filter :authenticate_user!
 
   def create
     unless params.has_key?(:image)
