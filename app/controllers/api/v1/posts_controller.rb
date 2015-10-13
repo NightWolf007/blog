@@ -7,8 +7,14 @@ class Api::V1::PostsController < ApplicationController
   def index
     @page = params[:page] && params[:page][:number] ? params[:page][:number] : DEFAULT_PAGE
     @per_page = params[:page] && params[:page][:size] ? params[:page][:size] : DEFAULT_PER_PAGE
+    @order = params[:order] && params[:order] == 'ASC' ? 'created_at ASC' : 'created_at DESC'
 
-    @posts = Post.search params[:search], page: @page, per_page: @per_page, order: 'created_at DESC'
+    if params[:tags]
+      @posts = Post.search params[:search], with_all: { tag_ids: JSON.parse(params[:tags]) },
+              page: @page, per_page: @per_page, order: @order
+    else
+      @posts = Post.search params[:search], page: @page, per_page: @per_page, order: @order
+    end
     render :json => @posts
   end
 
