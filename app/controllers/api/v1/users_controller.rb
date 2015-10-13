@@ -1,13 +1,14 @@
 class Api::V1::UsersController < ApplicationController
-  @@default_page_number = 1
-  @@default_page_size = 5
+  DEFAULT_PAGE = 1
+  DEFAULT_PER_PAGE = 10
 
   before_filter :authenticate_user!, :except => [:index, :show]
 
   def index
-    @number = params[:page] && params[:page][:number] ? params[:page][:number] : @@default_page_number
-    @size = params[:page] && params[:page][:size] ? params[:page][:size] : @@default_page_size
-    @users = User.page(@number).per(@size)
+    @page = params[:page] && params[:page][:number] ? params[:page][:number] : DEFAULT_PAGE
+    @per_page = params[:page] && params[:page][:size] ? params[:page][:size] : DEFAULT_PER_PAGE
+
+    @users = User.paginate page: @page, per_page: @per_page
     render :json => @users
   end
 

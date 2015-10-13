@@ -15,6 +15,7 @@ class Api::V1::PostsController < ApplicationController
     else
       @posts = Post.search params[:search], page: @page, per_page: @per_page, order: @order
     end
+    
     render :json => @posts
   end
 
