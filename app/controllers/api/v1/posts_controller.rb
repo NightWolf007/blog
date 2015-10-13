@@ -15,7 +15,7 @@ class Api::V1::PostsController < ApplicationController
     else
       @posts = Post.search params[:search], page: @page, per_page: @per_page, order: @order
     end
-    
+
     render :json => @posts
   end
 
@@ -83,7 +83,7 @@ class Api::V1::PostsController < ApplicationController
       render :status => 403, :json => {}
       return nil
     end
-    DeleteImage.new(@post.image).execute
+    DeleteImage.new(@post.image).execute if @post.image
     @post.destroy
     render :json => @post
   end
