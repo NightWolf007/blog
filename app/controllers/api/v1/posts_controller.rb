@@ -9,14 +9,14 @@ class Api::V1::PostsController < ApplicationController
     @per_page = params[:page] && params[:page][:size] ? params[:page][:size] : DEFAULT_PER_PAGE
 
     @posts = Post.page(@number).per(@size)
-    if params[:search]
-        p tag_ids: JSON.parse(params[:filter][:tags] || '{}')
-        @posts = Post.search params[:search], with: params[:filter],
-                with_all: {:tag_ids=>[1, 2]},
-                page: @page, per_page: @per_page
-    else
-      @posts = Post.all
-    end
+    # if params[:search]
+    #     p tag_ids: JSON.parse(params[:filter][:tags] || '{}')
+    #     @posts = Post.search params[:search], with: params[:filter],
+    #             with_all: {:tag_ids=>[1, 2]},
+    #             page: @page, per_page: @per_page
+    # else
+    #   @posts = Post.all
+    # end
     render :json => @posts
   end
 
