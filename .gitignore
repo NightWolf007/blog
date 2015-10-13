@@ -12,6 +12,7 @@
 !/log/.keep
 /tmp
 /public/images
+/db/sphinx
 
 *.sublime-project
 *.sublime-workspace
