@@ -67,9 +67,6 @@ GEM
     joiner (0.3.4)
       activerecord (>= 4.1.0)
     json (1.8.3)
-    kaminari (0.16.3)
-      actionpack (>= 3.0.0)
-      activesupport (>= 3.0.0)
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     mail (2.6.3)
@@ -146,7 +143,6 @@ DEPENDENCIES
   active_model_serializers!
   devise
   dotenv-rails
-  kaminari
   mysql2 (~> 0.3.18)
   rack-cors
   rails
