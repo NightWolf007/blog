@@ -8,7 +8,6 @@ class Api::V1::PostsController < ApplicationController
     @page = params[:page] && params[:page][:number] ? params[:page][:number] : DEFAULT_PAGE
     @per_page = params[:page] && params[:page][:size] ? params[:page][:size] : DEFAULT_PER_PAGE
 
-    # @posts = Post.page(@number).per(@size)
     @posts = Post.search params[:search], page: @page, per_page: @per_page, order: 'created_at DESC'
     render :json => @posts
   end
