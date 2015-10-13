@@ -35,3 +35,5 @@ gem 'devise'
 gem 'rack-cors'
 
 gem 'dotenv-rails'
+
+gem 'thinking-sphinx'
