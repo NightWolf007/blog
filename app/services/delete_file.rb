@@ -3,7 +3,7 @@ class DeleteFile
   FILES_DIR = Rails.root
 
   def initialize(filename)
-    @filename = context
+    @filename = filename
   end
 
   def execute
