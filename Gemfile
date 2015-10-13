@@ -29,6 +29,7 @@ gem 'mysql2', '~> 0.3.18'
 # gem 'active_model_serializers', :git => 'https://github.com/rails-api/active_model_serializers.git', :branch => '0-10-stable'
 gem 'active_model_serializers', :git => 'https://github.com/beauby/active_model_serializers.git'
 gem 'kaminari'
+gem 'will_paginate'
 
 gem 'devise'
 # cross domain
