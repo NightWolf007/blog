@@ -9,12 +9,13 @@ class Api::V1::PostsController < ApplicationController
     @per_page = params[:page] && params[:page][:size] ? params[:page][:size] : DEFAULT_PER_PAGE
     @order = params[:order] && params[:order] == 'ASC' ? 'created_at ASC' : 'created_at DESC'
 
-    if params[:tags]
-      @posts = Post.search params[:search], with_all: { tag_ids: JSON.parse(params[:tags]) },
-              page: @page, per_page: @per_page, order: @order
-    else
-      @posts = Post.search params[:search], page: @page, per_page: @per_page, order: @order
-    end
+    #if params[:tags]
+     # @posts = Post.search params[:search], with_all: { tag_ids: JSON.parse(params[:tags]) },
+      #        page: @page, per_page: @per_page, order: @order
+    #else
+     # @posts = Post.search params[:search], page: @page, per_page: @per_page, order: @order
+    #end
+    @posts = Post.paginate(page: @page, per_page: @per_page).order(@order)
 
     render :json => @posts
   end
